@@ -20,17 +20,18 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ message: errors.array() });
     }
+
     const { email, password } = req.body;
 
     try {
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(404).json({ message: "Invalid Credentials" });
+        return res.status(400).json({ message: "Invalid Credentials" });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(404).json({ message: "Invalid Credentials" });
+        return res.status(400).json({ message: "Invalid Credentials" });
       }
 
       const token = jwt.sign(

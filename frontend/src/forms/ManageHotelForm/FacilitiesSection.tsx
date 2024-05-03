@@ -11,9 +11,9 @@ const FacilitiesSection = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-3">Facilities</h2>
-      <div className="grid grid-cols-3 gap-3">
-        {hotelFacilities.map((facility, index) => (
-          <label key={index} className="text-sm flex gap-1 text-gray-700">
+      <div className="grid grid-cols-5 gap-3">
+        {hotelFacilities.map((facility) => (
+          <label className="text-sm flex gap-1 text-gray-700">
             <input
               type="checkbox"
               value={facility}
@@ -22,7 +22,7 @@ const FacilitiesSection = () => {
                   if (facilities && facilities.length > 0) {
                     return true;
                   } else {
-                    return "At list one facilities are required";
+                    return "At least one facility is required";
                   }
                 },
               })}

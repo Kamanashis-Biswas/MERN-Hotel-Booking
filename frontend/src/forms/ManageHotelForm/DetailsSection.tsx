@@ -21,6 +21,7 @@ const DetailsSection = () => {
           <span className="text-red-500">{errors.name.message}</span>
         )}
       </label>
+
       <div className="flex gap-4">
         <label className="text-gray-700 text-sm font-bold flex-1">
           City
@@ -62,9 +63,7 @@ const DetailsSection = () => {
           type="number"
           min={1}
           className="border rounded w-full py-1 px-2 font-normal"
-          {...register("pricePerNight", {
-            required: "This field is required",
-          })}
+          {...register("pricePerNight", { required: "This field is required" })}
         ></input>
         {errors.pricePerNight && (
           <span className="text-red-500">{errors.pricePerNight.message}</span>
@@ -81,10 +80,8 @@ const DetailsSection = () => {
           <option value="" className="text-sm font-bold">
             Select as Rating
           </option>
-          {[1, 2, 3, 4, 5].map((num, index) => (
-            <option key={index} value={num}>
-              {num}
-            </option>
+          {[1, 2, 3, 4, 5].map((num) => (
+            <option value={num}>{num}</option>
           ))}
         </select>
         {errors.starRating && (

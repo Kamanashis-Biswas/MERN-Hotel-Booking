@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export type RegisterFormData = {
   firstName: string;
@@ -16,6 +16,7 @@ const Register = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { showToast } = useAppContext();
+
   const {
     register,
     watch,
@@ -46,7 +47,7 @@ const Register = () => {
           First Name
           <input
             className="border rounded w-full py-1 px-2 font-normal"
-            {...register("firstName", { required: "This fiels is required" })}
+            {...register("firstName", { required: "This field is required" })}
           ></input>
           {errors.firstName && (
             <span className="text-red-500">{errors.firstName.message}</span>
@@ -56,7 +57,7 @@ const Register = () => {
           Last Name
           <input
             className="border rounded w-full py-1 px-2 font-normal"
-            {...register("lastName", { required: "This fiels is required" })}
+            {...register("lastName", { required: "This field is required" })}
           ></input>
           {errors.lastName && (
             <span className="text-red-500">{errors.lastName.message}</span>
@@ -68,7 +69,7 @@ const Register = () => {
         <input
           type="email"
           className="border rounded w-full py-1 px-2 font-normal"
-          {...register("email", { required: "This fiels is required" })}
+          {...register("email", { required: "This field is required" })}
         ></input>
         {errors.email && (
           <span className="text-red-500">{errors.email.message}</span>
@@ -80,10 +81,10 @@ const Register = () => {
           type="password"
           className="border rounded w-full py-1 px-2 font-normal"
           {...register("password", {
-            required: "This fiels is required",
+            required: "This field is required",
             minLength: {
               value: 6,
-              message: "Password must be at least 6 Character",
+              message: "Password must be at least 6 characters",
             },
           })}
         ></input>
@@ -99,9 +100,9 @@ const Register = () => {
           {...register("confirmPassword", {
             validate: (val) => {
               if (!val) {
-                return "This fiels is required";
+                return "This field is required";
               } else if (watch("password") !== val) {
-                return "Your password does not match";
+                return "Your passwords do no match";
               }
             },
           })}
@@ -110,14 +111,7 @@ const Register = () => {
           <span className="text-red-500">{errors.confirmPassword.message}</span>
         )}
       </label>
-      <span className="flex items-center justify-between">
-        <span className="text-sm">
-          Already Registered? Please{" "}
-          <Link className="underline" to="/sign-in">
-            Login
-          </Link>
-        </span>
-
+      <span>
         <button
           type="submit"
           className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"

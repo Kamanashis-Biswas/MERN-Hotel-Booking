@@ -5,9 +5,8 @@ import ManageHotelForm from "../forms/ManageHotelForm/ManageHotelForm";
 import { useAppContext } from "../contexts/AppContext";
 
 const EditHotel = () => {
-  const { showToast } = useAppContext();
-
   const { hotelId } = useParams();
+  const { showToast } = useAppContext();
 
   const { data: hotel } = useQuery(
     "fetchMyHotelById",

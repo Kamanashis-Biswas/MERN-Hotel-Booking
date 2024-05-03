@@ -41,6 +41,7 @@ const ImagesSection = () => {
             ))}
           </div>
         )}
+
         <input
           type="file"
           multiple
@@ -58,6 +59,7 @@ const ImagesSection = () => {
               if (totalLength > 6) {
                 return "Total number of images cannot be more than 6";
               }
+
               return true;
             },
           })}

@@ -1,5 +1,5 @@
-import ReactDatePicker from "react-datepicker";
 import { useForm } from "react-hook-form";
+import DatePicker from "react-datepicker";
 import { useSearchContext } from "../../contexts/SearchContext";
 import { useAppContext } from "../../contexts/AppContext";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -68,7 +68,7 @@ const GuestInfoForm = ({ hotelId, pricePerNight }: Props) => {
 
   return (
     <div className="flex flex-col p-4 bg-blue-200 gap-4">
-      <h3 className="text-lg font-bold">${pricePerNight} per night</h3>
+      <h3 className="text-md font-bold">£{pricePerNight}</h3>
       <form
         onSubmit={
           isLoggedIn ? handleSubmit(onSubmit) : handleSubmit(onSignInClick)
@@ -76,7 +76,7 @@ const GuestInfoForm = ({ hotelId, pricePerNight }: Props) => {
       >
         <div className="grid grid-cols-1 gap-4 items-center">
           <div>
-            <ReactDatePicker
+            <DatePicker
               required
               selected={checkIn}
               onChange={(date) => setValue("checkIn", date as Date)}
@@ -91,7 +91,7 @@ const GuestInfoForm = ({ hotelId, pricePerNight }: Props) => {
             />
           </div>
           <div>
-            <ReactDatePicker
+            <DatePicker
               required
               selected={checkOut}
               onChange={(date) => setValue("checkOut", date as Date)}

@@ -14,7 +14,7 @@ const MyHotels = () => {
   );
 
   if (!hotelData) {
-    return <span>No Hotel found</span>;
+    return <span>No Hotels found</span>;
   }
 
   return (
@@ -29,9 +29,9 @@ const MyHotels = () => {
         </Link>
       </span>
       <div className="grid grid-cols-1 gap-8">
-        {hotelData.map((hotel, index) => (
+        {hotelData.map((hotel) => (
           <div
-            key={index}
+            data-testid="hotel-card"
             className="flex flex-col justify-between border border-slate-300 rounded-lg p-8 gap-5"
           >
             <h2 className="text-2xl font-bold">{hotel.name}</h2>
@@ -46,7 +46,7 @@ const MyHotels = () => {
                 {hotel.type}
               </div>
               <div className="border border-slate-300 rounded-sm p-3 flex items-center">
-                <BiMoney className="mr-1" />${hotel.pricePerNight} per night
+                <BiMoney className="mr-1" />£{hotel.pricePerNight} per night
               </div>
               <div className="border border-slate-300 rounded-sm p-3 flex items-center">
                 <BiHotel className="mr-1" />

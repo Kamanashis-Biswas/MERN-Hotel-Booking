@@ -1,7 +1,7 @@
 import { useMutation } from "react-query";
 import ManageHotelForm from "../forms/ManageHotelForm/ManageHotelForm";
-import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
+import * as apiClient from "../api-client";
 
 const AddHotel = () => {
   const { showToast } = useAppContext();
@@ -11,7 +11,7 @@ const AddHotel = () => {
       showToast({ message: "Hotel Saved!", type: "SUCCESS" });
     },
     onError: () => {
-      showToast({ message: "Error Saving Hotel!", type: "ERROR" });
+      showToast({ message: "Error Saving Hotel", type: "ERROR" });
     },
   });
 

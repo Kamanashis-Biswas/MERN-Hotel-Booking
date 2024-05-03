@@ -2,9 +2,9 @@ import express, { Request, Response } from "express";
 import multer from "multer";
 import cloudinary from "cloudinary";
 import Hotel from "../models/hotel";
-import { HotelType } from "../shared/types";
 import verifyToken from "../middleware/auth";
 import { body } from "express-validator";
+import { HotelType } from "../shared/types";
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, //5MB
+    fileSize: 5 * 1024 * 1024, // 5MB
   },
 });
 
@@ -41,6 +41,7 @@ router.post(
       const newHotel: HotelType = req.body;
 
       const imageUrls = await uploadImages(imageFiles);
+
       newHotel.imageUrls = imageUrls;
       newHotel.lastUpdated = new Date();
       newHotel.userId = req.userId;
@@ -50,8 +51,8 @@ router.post(
 
       res.status(201).send(hotel);
     } catch (e) {
-      console.log("Error creating hotel: ", e);
-      res.status(500).json({ message: "Something went weong" });
+      console.log(e);
+      res.status(500).json({ message: "Something went wrong" });
     }
   }
 );
@@ -61,14 +62,17 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
     const hotels = await Hotel.find({ userId: req.userId });
     res.json(hotels);
   } catch (error) {
-    res.status(500).json({ message: "Error Fetching hotels" });
+    res.status(500).json({ message: "Error fetching hotels" });
   }
 });
 
 router.get("/:id", verifyToken, async (req: Request, res: Response) => {
   const id = req.params.id.toString();
   try {
-    const hotel = await Hotel.findOne({ _id: id, userId: req.userId });
+    const hotel = await Hotel.findOne({
+      _id: id,
+      userId: req.userId,
+    });
     res.json(hotel);
   } catch (error) {
     res.status(500).json({ message: "Error fetching hotels" });
@@ -94,7 +98,7 @@ router.put(
       );
 
       if (!hotel) {
-        return res.status(404).json({ message: "Hotel not Found" });
+        return res.status(404).json({ message: "Hotel not found" });
       }
 
       const files = req.files as Express.Multer.File[];

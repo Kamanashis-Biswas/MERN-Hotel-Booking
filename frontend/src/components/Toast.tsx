@@ -11,6 +11,7 @@ const Toast = ({ message, type, onClose }: ToastProps) => {
     const timer = setTimeout(() => {
       onClose();
     }, 5000);
+
     return () => {
       clearTimeout(timer);
     };
