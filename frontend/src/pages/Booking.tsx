@@ -30,10 +30,10 @@ const Booking = () => {
     () =>
       apiClient.createPaymentIntent(
         hotelId as string,
-        numberOfNights.toString()
+        numberOfNights.toString() || "1"
       ),
     {
-      enabled: !!hotelId && numberOfNights > 0,
+      enabled: !!hotelId,
     }
   );
 
@@ -64,6 +64,7 @@ const Booking = () => {
         numberOfNights={numberOfNights}
         hotel={hotel}
       />
+
       {currentUser && paymentIntentData && (
         <Elements
           stripe={stripePromise}
