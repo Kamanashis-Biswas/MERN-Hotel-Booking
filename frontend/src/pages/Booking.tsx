@@ -17,10 +17,10 @@ const Booking = () => {
 
   useEffect(() => {
     if (search.checkIn && search.checkOut) {
-      const nights =
+      let nights =
         Math.abs(search.checkOut.getTime() - search.checkIn.getTime()) /
         (1000 * 60 * 60 * 24);
-
+      nights = nights > 1 ? nights : 1;
       setNumberOfNights(Math.ceil(nights));
     }
   }, [search.checkIn, search.checkOut]);
@@ -33,7 +33,7 @@ const Booking = () => {
         numberOfNights.toString() || "1"
       ),
     {
-      enabled: !!hotelId,
+      enabled: !!hotelId && numberOfNights > 0,
     }
   );
 
@@ -64,7 +64,6 @@ const Booking = () => {
         numberOfNights={numberOfNights}
         hotel={hotel}
       />
-
       {currentUser && paymentIntentData && (
         <Elements
           stripe={stripePromise}

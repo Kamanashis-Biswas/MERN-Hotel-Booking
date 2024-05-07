@@ -17,7 +17,17 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string);
+
+try{
+  mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string).then((_) => {
+  console.log("Connected to the database!");
+}).catch((err)=>{
+  throw new Error("Failed try to reconnect!");
+});
+}catch(err){
+  console.log("Db connection failed!");
+}
+
 
 const app = express();
 app.use(cookieParser());
