@@ -1,6 +1,6 @@
-# Mern Hotel Booking - Frontend with TypeScript and React
+# Mern Hotel Booking - Backend with TypeScript and Express JS
 
-## Hosted in Firebase -> [Live Website](https://mernholidays-hotel-booking.web.app/)
+## Hosted in Vercel
 
 ## Setting up the development environment
 
@@ -17,14 +17,23 @@ git clone https://github.com/Kamanashis-Biswas/MERN-Hotel-Booking.git
 Now, open the folder in your <b>IDE (VS Code recommended)</b> and run the following commands on <b>terminal (Git Bash)</b>
 
 ```bash
-cd frontend
+cd backend
 ```
 
 ## Then Create a .env file and then enter your environment veriable information as per the format shown below
 
 ```bash
-VITE_API_BASE_URL=
-VITE_STRIPE_PUB_KEY=
+MONGODB_CONNECTION_STRING=
+JWT_SECRET_KEY=
+FRONTEND_URL=
+
+# Cloudinary Variable
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+#Stripe
+STRIPE_API_KEY=
 ```
 
 ```bash
