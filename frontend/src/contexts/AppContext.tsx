@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
 import Toast from "../components/Toast";
-import { useQuery } from "react-query";
-import * as apiClient from "../api-client";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 
 const STRIPE_PUB_KEY = import.meta.env.VITE_STRIPE_PUB_KEY || "";
@@ -28,10 +26,7 @@ export const AppContextProvider = ({
 }) => {
   const [toast, setToast] = useState<ToastMessage | undefined>(undefined);
 
-  const { isError } = useQuery("validateToken", apiClient.validateToken, {
-    retry: false,
-  });
-
+  const isError = localStorage.getItem("user") ? false : true;
   return (
     <AppContext.Provider
       value={{

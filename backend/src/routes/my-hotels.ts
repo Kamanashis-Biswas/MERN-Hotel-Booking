@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import multer from "multer";
 import cloudinary from "cloudinary";
 import Hotel from "../models/hotel";
-import verifyToken from "../middleware/auth";
+import { AuthMiddleware } from "../middleware/auth";
 import { body } from "express-validator";
 import { HotelType } from "../shared/types";
 
@@ -18,7 +18,7 @@ const upload = multer({
 
 router.post(
   "/",
-  verifyToken,
+  AuthMiddleware,
   [
     body("name").notEmpty().withMessage("Name is required"),
     body("city").notEmpty().withMessage("City is required"),
@@ -36,6 +36,7 @@ router.post(
   ],
   upload.array("imageFiles", 6),
   async (req: Request, res: Response) => {
+    const user = (req as any).user;
     try {
       const imageFiles = req.files as Express.Multer.File[];
       const newHotel: HotelType = req.body;
@@ -44,7 +45,7 @@ router.post(
 
       newHotel.imageUrls = imageUrls;
       newHotel.lastUpdated = new Date();
-      newHotel.userId = req.userId;
+      newHotel.userId = user._id;
 
       const hotel = new Hotel(newHotel);
       await hotel.save();
@@ -57,21 +58,23 @@ router.post(
   }
 );
 
-router.get("/", verifyToken, async (req: Request, res: Response) => {
+router.get("/", AuthMiddleware, async (req: Request, res: Response) => {
+  const user = (req as any).user;
   try {
-    const hotels = await Hotel.find({ userId: req.userId });
+    const hotels = await Hotel.find({ userId: user._id });
     res.json(hotels);
   } catch (error) {
     res.status(500).json({ message: "Error fetching hotels" });
   }
 });
 
-router.get("/:id", verifyToken, async (req: Request, res: Response) => {
+router.get("/:id", AuthMiddleware, async (req: Request, res: Response) => {
   const id = req.params.id.toString();
+  const user = (req as any).user;
   try {
     const hotel = await Hotel.findOne({
       _id: id,
-      userId: req.userId,
+      userId: user._id 
     });
     res.json(hotel);
   } catch (error) {
@@ -81,9 +84,10 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
 
 router.put(
   "/:hotelId",
-  verifyToken,
+  AuthMiddleware,
   upload.array("imageFiles"),
   async (req: Request, res: Response) => {
+    const user = (req as any).user;
     try {
       const updatedHotel: HotelType = req.body;
       updatedHotel.lastUpdated = new Date();
@@ -91,7 +95,7 @@ router.put(
       const hotel = await Hotel.findOneAndUpdate(
         {
           _id: req.params.hotelId,
-          userId: req.userId,
+          userId: user._id,
         },
         updatedHotel,
         { new: true }

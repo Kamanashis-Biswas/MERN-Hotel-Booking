@@ -3,7 +3,8 @@ import Hotel from "../models/hotel";
 import { BookingType, HotelSearchResponse } from "../shared/types";
 import { param, validationResult } from "express-validator";
 import Stripe from "stripe";
-import verifyToken from "../middleware/auth";
+import { AuthMiddleware } from "../middleware/auth";
+import User from "../models/user";
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY as string);
 
@@ -88,8 +89,9 @@ router.get(
 
 router.post(
   "/:hotelId/bookings/payment-intent",
-  verifyToken,
+  AuthMiddleware,
   async (req: Request, res: Response) => {
+    const user = JSON.parse(JSON.stringify((req as any).user));
     const { numberOfNights } = req.body;
     const hotelId = req.params.hotelId;
 
@@ -99,13 +101,12 @@ router.post(
     }
 
     const totalCost = hotel.pricePerNight * numberOfNights;
-
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalCost * 100,
       currency: "gbp",
       metadata: {
         hotelId,
-        userId: req.userId,
+        userId: user._id,
       },
     });
 
@@ -125,9 +126,10 @@ router.post(
 
 router.post(
   "/:hotelId/bookings",
-  verifyToken,
+  AuthMiddleware,
   async (req: Request, res: Response) => {
     try {
+      const user = JSON.parse(JSON.stringify((req as any).user));
       const paymentIntentId = req.body.paymentIntentId;
 
       const paymentIntent = await stripe.paymentIntents.retrieve(
@@ -140,7 +142,7 @@ router.post(
 
       if (
         paymentIntent.metadata.hotelId !== req.params.hotelId ||
-        paymentIntent.metadata.userId !== req.userId
+        paymentIntent.metadata.userId !== user._id
       ) {
         return res.status(400).json({ message: "payment intent mismatch" });
       }
@@ -153,7 +155,7 @@ router.post(
 
       const newBooking: BookingType = {
         ...req.body,
-        userId: req.userId,
+        userId: user._id,
       };
 
       const hotel = await Hotel.findOneAndUpdate(
